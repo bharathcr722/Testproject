@@ -1,0 +1,52 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<title>users</title>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div>
+    <table id="detailsTable">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+    <script>
+    $(document).ready(function() {
+            var authToken = localStorage.getItem("AuthToken");
+
+            $.ajax({
+                url: "https://localhost:7125/UserService/getAllUsers",
+                // headers: {
+                //     'Authorization': 'Bearer ' + authToken
+                // },
+                method: "GET",
+                success: function(data) {
+                    var tableBody = $('#detailsTable tbody');
+                    tableBody.empty(); // Clear existing rows
+
+                    $.each(data, function(index, detail) {
+                        var row = '<tr>' +
+                                  '<td>' + detail.id + '</td>' +
+                                  '<td>' + detail.name + '</td>' +
+                                  '</tr>';
+                        tableBody.append(row);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                }
+            });
+        });
+</script>
+</body>

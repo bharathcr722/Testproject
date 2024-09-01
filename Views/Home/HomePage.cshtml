@@ -1,0 +1,14 @@
+﻿<h1>Welcome to first page </h1>
+<p>
+<a asp-action="Task" asp-controller="UserService" > CompleteTask</a>
+</p>
+<p>
+    <a asp-action="Users" asp-controller="UserService"> Users</a>
+</p>
+<p>
+    <a asp-action="AccountDetail" asp-controller="UserService"> Account Detail</a>
+</p>
+<script>
+    var authToken = '@ViewData["AuthToken"]';
+    localStorage.setItem("AuthToken", authToken);
+</script>
