@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Testproject.Models.Encryption
+namespace Models.Encryption
 {
     public class JwtTokenGenerator
     {
@@ -32,5 +32,18 @@ namespace Testproject.Models.Encryption
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        //public string Gettoken(IEnumerable<Claim> claims)
+        //{
+        //    var sequritykey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
+        //    var credentials = new SigningCredentials(sequritykey, SecurityAlgorithms.HmacSha256);
+        //    var token = new JwtSecurityToken(issuer:_issuer,
+        //        audience:_audience,
+        //        expires:DateTime.Now.AddHours(1),
+        //        claims:claims,
+        //        signingCredentials:credentials
+        //        );
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
     }
 }
+

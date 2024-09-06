@@ -1,14 +1,18 @@
+using Behaviour.Behaviours;
+using Behaviour.Interface;
+using Core.KeyStore;
+using DataAccess.EntityDataAccess;
+using DataAccess.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Models.Encryption;
 using System.Text;
 using Testproject.MiddleWare;
 using Testproject.Models;
-using Testproject.Models.Encryption;
-using Testproject.Models.KeyStore;
 
 namespace Testproject
 {
@@ -18,6 +22,7 @@ namespace Testproject
         {
             var builder = WebApplication.CreateBuilder(args);
             ConfigureServices(builder);
+            RegisterServices(builder.Services);
 
             var multiSchemePolicy = new AuthorizationPolicyBuilder(
                         CookieAuthenticationDefaults.AuthenticationScheme,
@@ -101,6 +106,20 @@ namespace Testproject
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
+            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(options => {
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuer = true,
+            //            ValidateAudience = true,
+            //            ValidateLifetime = true,
+            //            ValidateIssuerSigningKey = true,
+            //            ValidIssuer = builder.Configuration["Jwt:Issuser"],
+            //            ValidAudience = builder.Configuration["Jwt:Audience"],
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            //        };
+                
+            //    });
             // Add authorization policies
             builder.Services.AddAuthorization(options =>
             {
@@ -118,6 +137,12 @@ namespace Testproject
                 );
             });
             builder.Services.AddCors();
+        }
+
+        public static void RegisterServices(IServiceCollection services)
+        {
+            services.AddTransient<IUsersBehaviour, UsersBehaviour>();
+            services.AddTransient<IUsersDataAccess, UsersDataAccess>();
         }
     }
 }

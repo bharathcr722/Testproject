@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argon2 Password Hashing</title>
+    <script src="https://cdn.jsdelivr.net/npm/argon2-browser@0.1.3/dist/argon2-browser.min.js"></script>
+</head>
+<body>
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // Define Argon2 options
+            var options = {
+                type: argon2.Type.ID,
+                memoryCost: 65536, // Memory cost (e.g., 64 MB)
+                timeCost: 3,       // Number of iterations
+                parallelism: 1     // Number of parallel threads
+            };
+
+            // Hash the password
+            argon2.hash(password, options).then(hash => {
+                console.log('Hashed Password:', hash);
+
+                // Prepare the data to send
+                var data = {
+                    username: username,
+                    password: hash
+                };
+
+                // Send the data to the server
+                fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }).catch(error => {
+                console.error('Hashing Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

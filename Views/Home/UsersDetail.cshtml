@@ -27,9 +27,9 @@
 
             $.ajax({
                 url: "https://localhost:7125/UserService/getAllUsers",
-                // headers: {
-                //     'Authorization': 'Bearer ' + authToken
-                // },
+                headers: {
+                    'Authorization': 'Bearer ' + authToken
+                },
                 method: "GET",
                 success: function(data) {
                     var tableBody = $('#detailsTable tbody');
@@ -37,8 +37,10 @@
 
                     $.each(data, function(index, detail) {
                         var row = '<tr>' +
-                                  '<td>' + detail.id + '</td>' +
+                                  '<td>' + detail.userId + '</td>' +
                                   '<td>' + detail.name + '</td>' +
+                                  '<td>' + detail.roleName + '</td>' +
+                                  '<td>' + detail.email + '</td>' +
                                   '</tr>';
                         tableBody.append(row);
                     });
@@ -47,6 +49,8 @@
                     console.error("AJAX request failed:", status, error);
                 }
             });
+        fetch("dfwefew", {headers:""})
+        .then(response)
         });
 </script>
 </body>
